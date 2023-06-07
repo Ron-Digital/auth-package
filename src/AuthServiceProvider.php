@@ -16,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
 
     // Bu metot, uygulama sahibinin paket yapılandırma dosyasını kendi yapılandırma dosyasına yayınlamasına izin verir.
     $this->publishes([
-        __DIR__.'./config/authservice.php' => $this->app->configPath('authservice.php'),
+        __DIR__.'./config/authservice.php' => \config_path('authservice.php'),
     ]);
 }    
 
