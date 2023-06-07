@@ -10,7 +10,7 @@ class AuthService
     protected $project;
     public function __construct($projectName)
     {
-        $this->authUrl = "http:/localhost:8001";
+        $this->authUrl = "https:/auth.ronservice.co";
         $this->project = \config('authservice.project_name') ?? $projectName;
     }
     public function login($userName, $password)
@@ -76,13 +76,11 @@ class AuthService
             $query['user_data'] = $details;
         }
 
-        // Diğer alanları buraya ekleyebilirsiniz
-
-        $loginResponse = Http::post($this->authUrl . "/register?project=" . $this->project, $query);
-        if ($loginResponse->getStatusCode() != 200) {
-            return $loginResponse->json();
+        $registerResponse = Http::post($this->authUrl . "/register?project=" . $this->project, $query);
+        if ($registerResponse->getStatusCode() != 200) {
+            return $registerResponse->json();
         }
-        $responseData = json_decode($loginResponse->body(), true);
+        $responseData = json_decode($registerResponse->body(), true);
         return $responseData;
     }
 }
