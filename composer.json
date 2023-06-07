@@ -1,0 +1,23 @@
+{
+    "name": "rondigital/auth",
+    "description": "ron digital backend auth processes",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Rondigital\\Auth\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.7",
+        "illuminate/http": "^10.13",
+        "illuminate/support": "^10.13",
+        "cerenimo/response-messages": "dev-main"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rondigital\\AuthServiceProvider"
+            ]
+        }
+    }
+}
