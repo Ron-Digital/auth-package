@@ -8,10 +8,10 @@ class AuthService
 {
     protected $authUrl;
     protected $project;
-    public function __construct()
+    public function __construct($projectName)
     {
         $this->authUrl = "https://auth.ronservice.co";
-        $this->project = \config('authservice.project_name');
+        $this->project = \config('authservice.project_name') ?? $projectName;
     }
     public function login($userName, $password)
     {
