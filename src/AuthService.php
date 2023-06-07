@@ -11,7 +11,7 @@ class AuthService
     public function __construct()
     {
         $this->authUrl = "https://auth.ronservice.co";
-        $this->project = $this->app['config']->get('authservice.project_name');
+        $this->project = \config('authservice.project_name');
     }
     public function login($userName, $password)
     {
