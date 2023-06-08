@@ -83,4 +83,13 @@ class AuthService
         $responseData = json_decode($registerResponse->body(), true);
         return $responseData;
     }
+
+    public function logout($bearerToken)
+    {
+        $logoutResponse = Http::withHeaders(['authorization' => $bearerToken])->get($this->authUrl . "/logout");
+        if ($logoutResponse->getStatusCode() != 200) {
+            return $logoutResponse->json();
+        }
+        return $logoutResponse->json();
+    }
 }
