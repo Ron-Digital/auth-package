@@ -112,4 +112,67 @@ class AuthService
         }
         return $resetPasswordResponse->json();
     }
+
+    public function update(
+        $userId,
+        $bearerToken,
+        $password = null,
+        // $email = null,
+        $userName = null,
+        $givenName = null,
+        $familyName = null,
+        $name = null,
+        $nickName = null,
+        $picture = null,
+        $userData = []
+    ) {
+        $details = [];
+        foreach ($userData as $key => $value) {
+            $details[$key] = $value;
+        }
+        $query = [];
+
+        if ($password) {
+            $query['password'] = $password;
+        }
+
+        // if ($email) {
+        //     $query['email'] = $email;
+        // }
+
+        if ($userName) {
+            $query['username'] = $userName;
+        }
+
+        if ($givenName) {
+            $query['given_name'] = $givenName;
+        }
+
+        if ($familyName) {
+            $query['family_name'] = $familyName;
+        }
+
+        if ($name) {
+            $query['name'] = $name;
+        }
+
+        if ($nickName) {
+            $query['nick_name'] = $nickName;
+        }
+
+        if ($picture) {
+            $query['picture'] = $picture;
+        }
+        if ($details != []) {
+            $query['user_data'] = $details;
+        }
+
+        $registerResponse = Http::withHeaders(['conntent-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/user/" . $userId . "?project=" . $this->project, $query);
+        return $registerResponse;
+        if ($registerResponse->getStatusCode() != 200) {
+            return $registerResponse->json();
+        }
+        $responseData = json_decode($registerResponse->body(), true);
+        return $responseData;
+    }
 }
