@@ -101,4 +101,15 @@ class AuthService
         }
         return $authResponse->json();
     }
+
+    public function resetPassword($email)
+    {
+        $resetPasswordResponse = Http::post($this->authUrl . "/reset-password?project=" . $this->project, [
+            'email' => $email
+        ]);
+        if ($resetPasswordResponse->getStatusCode() != 200) {
+            return $resetPasswordResponse->json();
+        }
+        return $resetPasswordResponse->json();
+    }
 }
