@@ -27,8 +27,8 @@ class AuthService
     }
 
     public function register(
-        $email = null,
         $password,
+        $email = null,
         $userName = null,
         $givenName = null,
         $familyName = null,
