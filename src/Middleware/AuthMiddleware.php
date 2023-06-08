@@ -10,6 +10,7 @@ use CerenOzkurt\ResponseMessages\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Rondigital\Auth\AuthService;
 
 class AuthMiddleware
 {
@@ -21,20 +22,12 @@ class AuthMiddleware
         if (!$token) {
             return $this->responseDataNotFound('access token');
         }
-
-        $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $token])->get("https://auth.ronservice.co/auth-user");
-        if ($authResponse->getStatusCode() != 200) {
-            return $authResponse->json();
+        $authService = new AuthService();
+        $auth = $authService->auth($token);
+        if ($auth['result'] != 'true') {
+            return $auth;
         }
-        // $data = json_decode($authResponse, true);
-        // $user = [
-        //     'id' => $data['data']['user']['id'],
-        //     'email' => $data['data']['user']['email'],
-        //     'firstName' =>  $data['data']['user']['givenName'],
-        //     'lastName' =>  $data['data']['user']['familyName'],
-        //     'emailVerified' =>  $data['data']['user']['emailVerified']
-        // ];
-        $request->merge(['user' => $authResponse->json()]);
+        $request->merge(['user' => $auth['data']['user']]);
         return $next($request);
     }
 }

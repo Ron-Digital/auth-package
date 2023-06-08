@@ -8,7 +8,7 @@ class AuthService
 {
     protected $authUrl;
     protected $project;
-    public function __construct($projectName)
+    public function __construct($projectName = 'default')
     {
         $this->authUrl = "https:/auth.ronservice.co";
         $this->project = \config('authservice.project_name') ?? $projectName;
@@ -91,5 +91,14 @@ class AuthService
             return $logoutResponse->json();
         }
         return $logoutResponse->json();
+    }
+
+    public function auth($bearerToken)
+    {
+        $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->get($this->authUrl . "/auth-user");
+        if ($authResponse->getStatusCode() != 200) {
+            return $authResponse->json();
+        }
+        return $authResponse->json();
     }
 }
