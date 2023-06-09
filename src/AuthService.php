@@ -168,7 +168,6 @@ class AuthService
         }
 
         $registerResponse = Http::withHeaders(['conntent-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/user/" . $userId . "?project=" . $this->project, $query);
-        return $registerResponse;
         if ($registerResponse->getStatusCode() != 200) {
             return $registerResponse->json();
         }
