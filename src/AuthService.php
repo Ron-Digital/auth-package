@@ -175,4 +175,15 @@ class AuthService
         $responseData = json_decode($registerResponse->body(), true);
         return $responseData;
     }
+
+    public function verifyEmail($userId, $bearerToken)
+    {
+        $emailVerifyResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/verify-email?project=" . $this->project, [
+            'userId' => $userId
+        ]);
+        if ($emailVerifyResponse->getStatusCode() != 200) {
+            return $emailVerifyResponse->json();
+        }
+        return $emailVerifyResponse->json();
+    }
 }
