@@ -21,12 +21,15 @@
  <br> 
 
 - konsolda *composer update* komutunu çalıştırın
+    ```php
+    composer update
+    ```
 
 <br>
 
 - env dosyanıza projenizin adını ekleyin
     ```php
-    AUTH_SERVICE_PROJECT_NAME=ecommerce
+    AUTH_SERVICE_PROJECT_NAME={{project_name}}
     ```
     <br>
 
