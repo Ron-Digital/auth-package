@@ -16,7 +16,7 @@ class PackageServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('auth_service', ResponseBuilder::class);
+        $this->app->bind('auth_service', AuthService::class);
         $this->mergeConfigFrom(__DIR__ . './../config/auth-service.php', 'auth-service');
     }
 
