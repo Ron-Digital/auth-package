@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class ResponseBuilder.
  */
-class ResponseTrait extends Facade
+class AuthService extends Facade
 {
     public static function getFacadeAccessor(): string
     {
