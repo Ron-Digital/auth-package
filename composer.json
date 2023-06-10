@@ -12,12 +12,5 @@
         "illuminate/http": "^10.13",
         "illuminate/support": "^10.13",
         "cerenimo/response-messages": "dev-main"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Rondigital\\AuthServiceProvider"
-            ]
-        }
     }
 }
