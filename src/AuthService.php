@@ -125,7 +125,6 @@ class AuthService
     }
 
     public function update(
-        $userId = null,
         $bearerToken,
         $password = null,
         // $email = null,
