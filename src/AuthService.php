@@ -82,7 +82,7 @@ class AuthService
         $registerResponse = Http::post($this->authUrl . "/register?project=" . $this->project, $query);
         if ($registerResponse->getStatusCode() != 200) {
             $errorData = json_decode($registerResponse, true);
-            return $this->responseError($errorData['error'], $registerResponse->getStatusCode());
+            return $this->responseError($errorData['error'] ?? $errorData['validation_error'], $registerResponse->getStatusCode());
         }
         $responseData = json_decode($registerResponse->body(), true);
         return $this->responseData($responseData['data'], $responseData['message']);
