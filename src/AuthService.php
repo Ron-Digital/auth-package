@@ -2,10 +2,12 @@
 
 namespace Rondigital\Auth;
 
+use CerenOzkurt\ResponseMessages\ResponseTrait;
 use Illuminate\Support\Facades\Http;
 
 class AuthService
 {
+    use ResponseTrait;
     protected $authUrl;
     protected $project;
     public function __construct($projectName = 'default')
@@ -20,10 +22,11 @@ class AuthService
             'password' => $password
         ]);
         if ($loginResponse->getStatusCode() != 200) {
-            return $loginResponse->json();
+            $errorData = json_decode($loginResponse, true);
+            return $this->responseError($errorData['error'], $loginResponse->getStatusCode());
         }
         $responseData = json_decode($loginResponse->body(), true);
-        return $responseData;
+        return $this->responseData($responseData['data'], $responseData['message']);
     }
 
     public function register(
@@ -78,28 +81,33 @@ class AuthService
 
         $registerResponse = Http::post($this->authUrl . "/register?project=" . $this->project, $query);
         if ($registerResponse->getStatusCode() != 200) {
-            return $registerResponse->json();
+            $errorData = json_decode($registerResponse, true);
+            return $this->responseError($errorData['error'], $registerResponse->getStatusCode());
         }
         $responseData = json_decode($registerResponse->body(), true);
-        return $responseData;
+        return $this->responseData($responseData['data'], $responseData['message']);
     }
 
     public function logout($bearerToken)
     {
         $logoutResponse = Http::withHeaders(['authorization' => $bearerToken])->get($this->authUrl . "/logout");
         if ($logoutResponse->getStatusCode() != 200) {
-            return $logoutResponse->json();
+            $errorData = json_decode($logoutResponse, true);
+            return $this->responseError($errorData['error'], $logoutResponse->getStatusCode());
         }
-        return $logoutResponse->json();
+        $responseData = json_decode($logoutResponse->body(), true);
+        return $this->responseSuccess($responseData['message']);
     }
 
     public function auth($bearerToken)
     {
         $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->get($this->authUrl . "/auth-user");
         if ($authResponse->getStatusCode() != 200) {
-            return $authResponse->json();
+            $errorData = json_decode($authResponse, true);
+            return $this->responseError($errorData['error'], $authResponse->getStatusCode());
         }
-        return $authResponse->json();
+        $responseData = json_decode($authResponse->body(), true);
+        return $this->responseSuccess($responseData['message']);
     }
 
     public function resetPassword($email)
@@ -108,9 +116,11 @@ class AuthService
             'email' => $email
         ]);
         if ($resetPasswordResponse->getStatusCode() != 200) {
-            return $resetPasswordResponse->json();
+            $errorData = json_decode($resetPasswordResponse, true);
+            return $this->responseError($errorData['error'], $resetPasswordResponse->getStatusCode());
         }
-        return $resetPasswordResponse->json();
+        $responseData = json_decode($resetPasswordResponse->body(), true);
+        return $this->responseSuccess($responseData['message']);
     }
 
     public function update(
@@ -169,10 +179,11 @@ class AuthService
 
         $registerResponse = Http::withHeaders(['conntent-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/user/" . $userId . "?project=" . $this->project, $query);
         if ($registerResponse->getStatusCode() != 200) {
-            return $registerResponse->json();
+            $errorData = json_decode($registerResponse, true);
+            return $this->responseError($errorData['error'], $registerResponse->getStatusCode());
         }
         $responseData = json_decode($registerResponse->body(), true);
-        return $responseData;
+        return $this->responseData($responseData['data'], $responseData['message']);
     }
 
     public function verifyEmail($userId, $bearerToken)
@@ -181,8 +192,10 @@ class AuthService
             'userId' => $userId
         ]);
         if ($emailVerifyResponse->getStatusCode() != 200) {
-            return $emailVerifyResponse->json();
+            $errorData = json_decode($emailVerifyResponse, true);
+            return $this->responseError($errorData['error'], $emailVerifyResponse->getStatusCode());
         }
-        return $emailVerifyResponse->json();
+        $responseData = json_decode($emailVerifyResponse->body(), true);
+        return $this->responseSuccess($responseData['message']);
     }
 }
