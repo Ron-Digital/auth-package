@@ -125,7 +125,7 @@ class AuthService
     }
 
     public function update(
-        $userId,
+        $userId = null,
         $bearerToken,
         $password = null,
         // $email = null,
@@ -178,7 +178,7 @@ class AuthService
             $query['user_data'] = $details;
         }
 
-        $registerResponse = Http::withHeaders(['conntent-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/user/" . $userId . "?project=" . $this->project, $query);
+        $registerResponse = Http::withHeaders(['conntent-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/update?project=" . $this->project, $query);
         if ($registerResponse->getStatusCode() != 200) {
             $errorData = json_decode($registerResponse, true);
             return $this->responseError($errorData['error'], $registerResponse->getStatusCode());
