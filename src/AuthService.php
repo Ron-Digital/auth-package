@@ -107,7 +107,7 @@ class AuthService
             return $this->responseError($errorData['error'], $authResponse->getStatusCode());
         }
         $responseData = json_decode($authResponse->body(), true);
-        return $this->responseSuccess($responseData['message']);
+        return $responseData;
     }
 
     public function resetPassword($email)
