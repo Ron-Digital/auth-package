@@ -19,10 +19,11 @@ class AuthMiddleware
         }
         $authService = new AuthService();
         $auth = $authService->auth($token);
-        if ($auth['result'] != 'true') {
+
+        if ($auth->original['result'] != 'true') {
             return $auth;
         }
-        $request->merge(['user' => $auth['data']['user']]);
+        $request->merge(['user' => $auth->original['data']['user']]);
         return $next($request);
     }
 }
