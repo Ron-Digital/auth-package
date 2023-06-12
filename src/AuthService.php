@@ -23,6 +23,9 @@ class AuthService
         ]);
         if ($loginResponse->getStatusCode() != 200) {
             $errorData = json_decode($loginResponse, true);
+            if ($errorData['validation_error']) {
+                return $this->responseValidation($errorData['validation_error'], $loginResponse->getStatusCode());
+            }
             return $this->responseError($errorData['error'], $loginResponse->getStatusCode());
         }
         $responseData = json_decode($loginResponse->body(), true);
@@ -82,7 +85,10 @@ class AuthService
         $registerResponse = Http::post($this->authUrl . "/register?project=" . $this->project, $query);
         if ($registerResponse->getStatusCode() != 200) {
             $errorData = json_decode($registerResponse, true);
-            return $this->responseError($errorData['error'] ?? $errorData['validation_error'], $registerResponse->getStatusCode());
+            if ($errorData['validation_error']) {
+                return $this->responseValidation($errorData['validation_error'], $registerResponse->getStatusCode());
+            }
+            return $this->responseError($errorData['error'], $registerResponse->getStatusCode());
         }
         $responseData = json_decode($registerResponse->body(), true);
         return $this->responseData($responseData['data'], $responseData['message']);
@@ -93,6 +99,9 @@ class AuthService
         $logoutResponse = Http::withHeaders(['authorization' => $bearerToken])->get($this->authUrl . "/logout");
         if ($logoutResponse->getStatusCode() != 200) {
             $errorData = json_decode($logoutResponse, true);
+            if ($errorData['validation_error']) {
+                return $this->responseValidation($errorData['validation_error'], $logoutResponse->getStatusCode());
+            }
             return $this->responseError($errorData['error'], $logoutResponse->getStatusCode());
         }
         $responseData = json_decode($logoutResponse->body(), true);
@@ -104,11 +113,13 @@ class AuthService
         $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->get($this->authUrl . "/auth-user");
         if ($authResponse->getStatusCode() != 200) {
             $errorData = json_decode($authResponse, true);
+            if ($errorData['validation_error']) {
+                return $this->responseValidation($errorData['validation_error'], $authResponse->getStatusCode());
+            }
             return $this->responseError($errorData['error'], $authResponse->getStatusCode());
         }
         $responseData = json_decode($authResponse->body(), true);
         return $this->responseData($responseData['data']);
-
     }
 
     public function resetPassword($email)
@@ -118,6 +129,9 @@ class AuthService
         ]);
         if ($resetPasswordResponse->getStatusCode() != 200) {
             $errorData = json_decode($resetPasswordResponse, true);
+            if ($errorData['validation_error']) {
+                return $this->responseValidation($errorData['validation_error'], $resetPasswordResponse->getStatusCode());
+            }
             return $this->responseError($errorData['error'], $resetPasswordResponse->getStatusCode());
         }
         $responseData = json_decode($resetPasswordResponse->body(), true);
@@ -177,12 +191,15 @@ class AuthService
             $query['user_data'] = $details;
         }
 
-        $registerResponse = Http::withHeaders(['conntent-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/update?project=" . $this->project, $query);
-        if ($registerResponse->getStatusCode() != 200) {
-            $errorData = json_decode($registerResponse, true);
-            return $this->responseError($errorData['error'], $registerResponse->getStatusCode());
+        $updateResponse = Http::withHeaders(['conntent-type' => 'application/json', 'Authorization' => $bearerToken])->post($this->authUrl . "/update?project=" . $this->project, $query);
+        if ($updateResponse->getStatusCode() != 200) {
+            $errorData = json_decode($updateResponse, true);
+            if ($errorData['validation_error']) {
+                return $this->responseValidation($errorData['validation_error'], $updateResponse->getStatusCode());
+            }
+            return $this->responseError($errorData['error'], $updateResponse->getStatusCode());
         }
-        $responseData = json_decode($registerResponse->body(), true);
+        $responseData = json_decode($updateResponse->body(), true);
         return $this->responseData($responseData['data'], $responseData['message']);
     }
 
@@ -193,6 +210,9 @@ class AuthService
         ]);
         if ($emailVerifyResponse->getStatusCode() != 200) {
             $errorData = json_decode($emailVerifyResponse, true);
+            if ($errorData['validation_error']) {
+                return $this->responseValidation($errorData['validation_error'], $emailVerifyResponse->getStatusCode());
+            }
             return $this->responseError($errorData['error'], $emailVerifyResponse->getStatusCode());
         }
         $responseData = json_decode($emailVerifyResponse->body(), true);
