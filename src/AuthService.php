@@ -96,7 +96,7 @@ class AuthService
 
     public function logout($bearerToken)
     {
-        $logoutResponse = Http::withHeaders(['authorization' => $bearerToken])->get($this->authUrl . "/logout");
+        $logoutResponse = Http::withHeaders(['authorization' => $bearerToken])->get($this->authUrl . "/logout?project=" . $this->project,);
         if ($logoutResponse->getStatusCode() != 200) {
             $errorData = json_decode($logoutResponse, true);
             if (isset($errorData['validation_error'])) {
@@ -110,7 +110,7 @@ class AuthService
 
     public function auth($bearerToken)
     {
-        $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->get($this->authUrl . "/auth-user");
+        $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->get($this->authUrl . "/auth-user?project=".$this->project);
         if ($authResponse->getStatusCode() != 200) {
             $errorData = json_decode($authResponse, true);
             if (isset($errorData['validation_error'])) {
