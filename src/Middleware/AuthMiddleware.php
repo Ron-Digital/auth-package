@@ -17,7 +17,7 @@ class AuthMiddleware
         if (!$token) {
             return $this->responseDataNotFound('access token');
         }
-        $authService = new AuthService();
+        $authService = new AuthService($request->project);
         $auth = $authService->auth($token);
 
         if ($auth->original['result'] != 'true') {
