@@ -110,7 +110,7 @@ class AuthService
 
     public function auth($bearerToken)
     {
-        $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->get($this->authUrl . "/auth-user?project=".$this->project);
+        $authResponse = Http::withHeaders(['content-type' => 'application/json', 'Authorization' => $bearerToken])->get($this->authUrl . "/auth-user?project=" . $this->project);
         if ($authResponse->getStatusCode() != 200) {
             $errorData = json_decode($authResponse, true);
             if (isset($errorData['validation_error'])) {
@@ -217,5 +217,19 @@ class AuthService
         }
         $responseData = json_decode($emailVerifyResponse->body(), true);
         return $this->responseSuccess($responseData['message']);
+    }
+
+    public function search($detailName, $detailValue)
+    {
+        $searchResponse = Http::withHeaders(['content-type' => 'application/json'])->get($this->authUrl . "/search?project=" . $this->project . '&detailName=' . $detailName . '&detailValue=' . $detailValue);
+        if ($searchResponse->getStatusCode() != 200) {
+            $errorData = json_decode($searchResponse, true);
+            if (isset($errorData['validation_error'])) {
+                return $this->responseValidation($errorData['validation_error'], $searchResponse->getStatusCode());
+            }
+            return $this->responseError($errorData['error'], $searchResponse->getStatusCode());
+        }
+        $responseData = json_decode($searchResponse->body(), true);
+        return $this->responseData($responseData['data']);
     }
 }
