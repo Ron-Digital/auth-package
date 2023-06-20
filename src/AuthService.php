@@ -232,4 +232,60 @@ class AuthService
         $responseData = json_decode($searchResponse->body(), true);
         return $this->responseData($responseData['data']);
     }
+
+    public function updateById(
+        $userId,
+        $userName = null,
+        $givenName = null,
+        $familyName = null,
+        $name = null,
+        $nickName = null,
+        $picture = null,
+        $userData = []
+    ) {
+        $details = [];
+        foreach ($userData as $key => $value) {
+            $details[$key] = $value;
+        }
+        $query = [];
+
+
+        if ($userName) {
+            $query['username'] = $userName;
+        }
+
+        if ($givenName) {
+            $query['given_name'] = $givenName;
+        }
+
+        if ($familyName) {
+            $query['family_name'] = $familyName;
+        }
+
+        if ($name) {
+            $query['name'] = $name;
+        }
+
+        if ($nickName) {
+            $query['nick_name'] = $nickName;
+        }
+
+        if ($picture) {
+            $query['picture'] = $picture;
+        }
+        if ($details != []) {
+            $query['user_data'] = $details;
+        }
+
+        $updateResponse = Http::withHeaders(['conntent-type' => 'application/json'])->post($this->authUrl . "/".$userId."/update?project=" . $this->project, $query);
+        if ($updateResponse->getStatusCode() != 200) {
+            $errorData = json_decode($updateResponse, true);
+            if (isset($errorData['validation_error'])) {
+                return $this->responseValidation($errorData['validation_error'], $updateResponse->getStatusCode());
+            }
+            return $this->responseError($errorData['error'], $updateResponse->getStatusCode());
+        }
+        $responseData = json_decode($updateResponse->body(), true);
+        return $this->responseData($responseData['data'], $responseData['message']);
+    }
 }
