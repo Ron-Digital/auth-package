@@ -9,8 +9,8 @@
     },
     "require": {
         "guzzlehttp/guzzle": "^7.7",
-        "illuminate/http": "^10.13",
-        "illuminate/support": "^10.13",
+        "illuminate/http": "^9.19",
+        "illuminate/support": "^9.13",
         "cerenimo/response-messages": "dev-main"
     }
 }
